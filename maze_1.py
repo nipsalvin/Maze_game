@@ -1,4 +1,6 @@
 #A simple maze game on python by @Nips
+
+
 import turtle
 
 wn = turtle.Screen()
@@ -30,17 +32,13 @@ class Player(turtle.Turtle):
         self.goto(self.xcor(), self.ycor() - 24)
 
     def go_left(self):
-        self.goto(self.xcr() -24, self.ycor())
+        self.goto(self.xcor() -24, self.ycor())
 
     def go_right(self):
-        self.goto(self.xcor() + 24, self.cor())
-
-
+        self.goto(self.xcor() + 24, self.ycor())
 
 #Creating list of levels
 levels = [""]
-
-
 
 #First levels
 level_1 = [
@@ -94,7 +92,6 @@ def setup_maze(level):
             if character == "P":
                 player.goto(screen_x, screen_y)
 
-
 #Create class instances
 pen = Pen()
 player = Player()
@@ -114,4 +111,5 @@ wn.tracer(0)
 
 #main game loop
 while True:
-    pass
+    #Update screen
+    wn.update()

@@ -1,5 +1,5 @@
 #A simple maze game on python by @Nips
-
+#1% more
 
 import turtle
 

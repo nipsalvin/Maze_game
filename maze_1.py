@@ -1,7 +1,8 @@
 #A simple maze game on python by @Nips
-#1% more
+
 
 import turtle
+import math
 
 wn = turtle.Screen()
 wn.bgcolor("black")
@@ -24,18 +25,70 @@ class Player(turtle.Turtle):
         self.color("blue")
         self.penup()
         self.speed(0)
+        self.gold = 0
 
     def go_up(self):
-        self.goto(self.xcor(), self.ycor() + 24)
+        #calculate position to move to
+        move_to_x = player.xcor()
+        move_to_y = player.ycor()+24
+
+        #check if space has a wall
+        if (move_to_x, move_to_y) not in walls:
+            self.goto(move_to_x, move_to_y)
 
     def go_down(self):
-        self.goto(self.xcor(), self.ycor() - 24)
+        #calculate spot to move to
+        move_to_x = player.xcor()
+        move_to_y = player.ycor()-24
+
+        #check if space has a wall
+        if (move_to_x, move_to_y) not in walls:
+            self.goto(move_to_x, move_to_y)
+
 
     def go_left(self):
-        self.goto(self.xcor() -24, self.ycor())
+        #calculate spot t move to
+        move_to_x = player.xcor()-24
+        move_to_y = player.ycor()
+
+        #check if space has a wall
+        if (move_to_x, move_to_y) not in walls:
+            self.goto(move_to_x, move_to_y)
+
 
     def go_right(self):
-        self.goto(self.xcor() + 24, self.ycor())
+        #calculate spot to move to
+        move_to_x = player.xcor()+24
+        move_to_y = player.ycor()
+
+        #check if space has a wall
+        if (move_to_x, move_to_y) not in walls:
+            self.goto(move_to_x, move_to_y)
+
+    def is_collision(self, other):
+        a = self.xcor()-other.xcor()
+        b = self.ycor()-other.ycor()
+        distance = math.sqrt((a ** 2) +(b ** 2))
+
+        if distance < 5:
+            return True
+        else:
+            return False
+
+class Treasure(turtle.Turtle):
+    def __init__(self, x, y):
+        turtle.Turtle.__init__(self)
+        self.shape("circle")
+        self.color("gold")
+        self.penup()
+        self.speed(0)
+        self.gold = 100
+        self.goto(x, y)
+
+    def destroy(self):
+        self.goto(2000, 2000)
+        self.hideturtle()
+
 
 #Creating list of levels
 levels = [""]
@@ -61,13 +114,16 @@ level_1 = [
 "XXX         XXXXXXXXXXXXX",
 "XXXXXXXXXX  XXXXXXXXXXXXX",
 "XXXXXXXXXX              X",
-"XX   XXXXX              X",
+"XX   TXXXXX             X",
 "XX   XXXXXXXXXXXXX  XXXXX",
 "XX    YXXXXXXXXXXX  XXXXX",
 "XX          XXXX        X",
 "XXXX                    X",
 "XXXXXXXXXXXXXXXXXXXXXXXXX,"
 ]
+
+#adding treasure list
+treasures = []
 
 #Add maze to mazes list
 levels.append(level_1)
@@ -87,14 +143,24 @@ def setup_maze(level):
             if character == "X":
                 pen.goto(screen_x,screen_y)
                 pen.stamp()
-            
+                #Adding cordinates to wall listen
+                walls.append((screen_x, screen_y))
+
             #check if it is a P (represnting player)
             if character == "P":
                 player.goto(screen_x, screen_y)
 
+            #check if it is a T
+            if character == "T":
+                treasures.append(Treasure(screen_x, screen_y))
+
 #Create class instances
 pen = Pen()
 player = Player()
+
+#Creating walls
+walls = []
+
 
 #Set up the level
 setup_maze(levels[1])
@@ -111,5 +177,16 @@ wn.tracer(0)
 
 #main game loop
 while True:
+    #check for player collission with treasure
+    #iterate through player list
+    for treasure in treasures:
+        if player.is_collision(treasure):
+            #add the treasure gold to the player gold
+            player.gold += treasure.gold
+            print("Player gold: {}".format(player.gold))
+            #destroy te treasure
+            treasure.destroy()
+            #Remove treasurefrom treasures list
+            treasures.remove(treasure)
     #Update screen
     wn.update()

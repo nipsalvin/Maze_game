@@ -1,13 +1,15 @@
 #A simple maze game on python by @Nips
-
+#python 2 & python 3 cOMPATIBLE
 
 import turtle
 import math
+import random
 
 wn = turtle.Screen()
 wn.bgcolor("black")
 wn.title("Maze Game by @Nips")
 wn.setup(700,700)
+wn.tracer(0)
 
 #Creating Pen
 class Pen(turtle.Turtle):
@@ -88,7 +90,47 @@ class Treasure(turtle.Turtle):
     def destroy(self):
         self.goto(2000, 2000)
         self.hideturtle()
+    
+class Enemy(turtle.Turtle):
+    def __init__(self, x, y):
+        turtle.Turtle.__init__(self)
+        self.shape("triangle")
+        self.color("red")
+        self.penup()
+        self.speed(0)
+        self.gold = 25
+        self.goto(x, y)
+        self.direction = random.choice(["up", "down", "left", "right"])
 
+    def move(self):
+        if self.direction == "up":
+            dx = 0
+            dy = 24
+        elif self.direction == "down":
+            dx = 0
+            dy = -24
+        elif self.direction == "left":
+            dx = -24
+            dy = 0
+        elif self.direction == "right":
+            dx = 24
+            dy = 0
+        else:
+            dx = 0
+        
+        #Calculate spot to move to
+        move_to_x = self.xcor() + dx
+        move_to_y = self.ycor() + dy
+
+        #Check if space has walls
+        if (move_to_x, move_to_y)not in walls:
+            self.goto(move_to_x, move_to_y)
+        else:
+            #Choose different direction
+            self.direction = random.choice(["up", "down", "right", "left"])
+
+        #set timer to move next time
+        turtle.ontimer(self.move, t=random.randint(100, 300))
 
 #Creating list of levels
 levels = [""]
@@ -96,18 +138,18 @@ levels = [""]
 #First levels
 level_1 = [
 "XXXXXXXXXXXXXXXXXXXXXXXXX",
-"X  XXXXXXX    P     XXXXX",
+"X  EXXXXXX    P     XXXXX",
 "X  XXXXXXX  XXXXXX  XXXXX",
 "X       XX  XXXXXX  XXXXX",
 "X       XX  XXX        XX",
 "XXXXXX  XX  XXX        XX",
 "XXXXXX  XX  XXXXXX  XXXXX",
 "XXXXXX  XX    XXXX  XXXXX",
-"X  XXX        XXXX  XXXXX",
+"X  XXX        XXXX EXXXXX",
 "X  XXX  XXXXXXXXXXXXXXXXX",
 "X         XXXXXXXXXXXXXXX",
 "X                XXXXXXXX",
-"XXXXXXXXXXXX     XXXXX  X",
+"XXXXXXXXXXXX     XXXXX EX",
 "XXXXXXXXXXXXXXX  XXXXX  X",
 "XXX  XXXXXXXXXX         X",
 "XXX                     X",
@@ -118,12 +160,15 @@ level_1 = [
 "XX   XXXXXXXXXXXXX  XXXXX",
 "XX    YXXXXXXXXXXX  XXXXX",
 "XX          XXXX        X",
-"XXXX                    X",
+"XXXX  E                 X",
 "XXXXXXXXXXXXXXXXXXXXXXXXX,"
 ]
 
 #adding treasure list
 treasures = []
+
+#Adding enemy list
+enemies = []
 
 #Add maze to mazes list
 levels.append(level_1)
@@ -154,6 +199,10 @@ def setup_maze(level):
             if character == "T":
                 treasures.append(Treasure(screen_x, screen_y))
 
+            #check if it is an E (representing enemy)
+            if character == "E":
+                enemies.append(Enemy(screen_x, screen_y))
+
 #Create class instances
 pen = Pen()
 player = Player()
@@ -175,6 +224,10 @@ turtle.onkey(player.go_right,"Right")
 #Turn off screen updates
 wn.tracer(0)
 
+#Start moving enemies
+for enemy in enemies:
+    turtle.ontimer(enemy.move, t=250)
+
 #main game loop
 while True:
     #check for player collission with treasure
@@ -188,5 +241,11 @@ while True:
             treasure.destroy()
             #Remove treasurefrom treasures list
             treasures.remove(treasure)
+    
+    #Iterate through enemy list to see if player collides
+    for enemy in enemies:
+        if player.is_collision(enemy):
+            print("Player dies!")
+    
     #Update screen
     wn.update()

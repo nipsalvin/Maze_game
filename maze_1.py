@@ -1,5 +1,6 @@
 #A simple maze game on python by @Nips
 #python 2 & python 3 cOMPATIBLE
+#Enemies now with AI
 
 import turtle
 import math
@@ -31,8 +32,8 @@ class Player(turtle.Turtle):
 
     def go_up(self):
         #calculate position to move to
-        move_to_x = player.xcor()
-        move_to_y = player.ycor()+24
+        move_to_x = self.xcor()
+        move_to_y = self.ycor()+24
 
         #check if space has a wall
         if (move_to_x, move_to_y) not in walls:
@@ -40,8 +41,8 @@ class Player(turtle.Turtle):
 
     def go_down(self):
         #calculate spot to move to
-        move_to_x = player.xcor()
-        move_to_y = player.ycor()-24
+        move_to_x = self.xcor()
+        move_to_y = self.ycor()-24
 
         #check if space has a wall
         if (move_to_x, move_to_y) not in walls:
@@ -50,8 +51,8 @@ class Player(turtle.Turtle):
 
     def go_left(self):
         #calculate spot t move to
-        move_to_x = player.xcor()-24
-        move_to_y = player.ycor()
+        move_to_x = self.xcor()-24
+        move_to_y = self.ycor()
 
         #check if space has a wall
         if (move_to_x, move_to_y) not in walls:
@@ -60,8 +61,8 @@ class Player(turtle.Turtle):
 
     def go_right(self):
         #calculate spot to move to
-        move_to_x = player.xcor()+24
-        move_to_y = player.ycor()
+        move_to_x = self.xcor()+24
+        move_to_y = self.ycor()
 
         #check if space has a wall
         if (move_to_x, move_to_y) not in walls:
@@ -117,6 +118,19 @@ class Enemy(turtle.Turtle):
             dy = 0
         else:
             dx = 0
+            dy = 0
+        
+        #Check if player is close
+        #if so, go in that direction
+        if self.is_close(player):
+            if player.xcor() < self.xcor():
+                self.direction = "left"
+            elif player.xcor() > self.xcor():
+                self.direction = "right"
+            elif player.ycor() < self.ycor():
+                self.direction = "down"
+            elif player.ycor() > self.ycor():
+                self.direction = "up"
         
         #Calculate spot to move to
         move_to_x = self.xcor() + dx
@@ -131,6 +145,21 @@ class Enemy(turtle.Turtle):
 
         #set timer to move next time
         turtle.ontimer(self.move, t=random.randint(100, 300))
+
+    #defining parameters of method "is_close"
+    def is_close(self, other):
+        a = self.xcor()-other.xcor()
+        b = self.ycor()-other.ycor()
+        distance = math.sqrt((a ** 2) + (b ** 2))
+
+        if distance < 75:
+            return True
+        else:
+            return False
+    
+    def destroy(self):
+        self.goto(2000, 2000)
+        self.hhideturtle()
 
 #Creating list of levels
 levels = [""]

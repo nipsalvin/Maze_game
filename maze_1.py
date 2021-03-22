@@ -1,6 +1,6 @@
 #A simple maze game on python by @Nips
 #python 2 & python 3 cOMPATIBLE
-#Enemies now with AI
+#Enemies now with "Follow" capability
 
 import turtle
 import math

@@ -1,6 +1,8 @@
 #A simple maze game on python by @Nips
 #python 2 & python 3 cOMPATIBLE
 #Enemies now with "Follow" capability
+#Created by @Nips. 
+
 
 import turtle
 import math

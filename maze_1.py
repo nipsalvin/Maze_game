@@ -169,18 +169,18 @@ levels = [""]
 #First levels
 level_1 = [
 "XXXXXXXXXXXXXXXXXXXXXXXXX",
-"X  EXXXXXX    P     XXXXX",
+"XT EXXXXXX    P     XXXXX",
 "X  XXXXXXX  XXXXXX  XXXXX",
 "X       XX  XXXXXX  XXXXX",
-"X       XX  XXX        XX",
+"X       XX  XXX       TXX",
 "XXXXXX  XX  XXX        XX",
 "XXXXXX  XX  XXXXXX  XXXXX",
 "XXXXXX  XX    XXXX  XXXXX",
-"X  XXX        XXXX EXXXXX",
+"X TXXX        XXXX EXXXXX",
 "X  XXX  XXXXXXXXXXXXXXXXX",
 "X         XXXXXXXXXXXXXXX",
 "X                XXXXXXXX",
-"XXXXXXXXXXXX     XXXXX EX",
+"XXXXXXXXXXXX     XXXXXTEX",
 "XXXXXXXXXXXXXXX  XXXXX  X",
 "XXX  XXXXXXXXXX         X",
 "XXX                     X",
@@ -190,7 +190,7 @@ level_1 = [
 "XX   TXXXXX             X",
 "XX   XXXXXXXXXXXXX  XXXXX",
 "XX    YXXXXXXXXXXX  XXXXX",
-"XX          XXXX        X",
+"XX          XXXX       TX",
 "XXXX  E                 X",
 "XXXXXXXXXXXXXXXXXXXXXXXXX,"
 ]

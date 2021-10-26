@@ -1,5 +1,5 @@
 #A simple maze game on python by @Nips
-#python 2 & python 3 cOMPATIBLE
+#python 2 & python 3 COMPATIBLE
 #Enemies now with "Follow" capability
 #Created by @Nips. 
 

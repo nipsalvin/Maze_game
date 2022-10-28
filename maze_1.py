@@ -122,7 +122,7 @@ class Enemy(turtle.Turtle):
             dx = 0
             dy = 0
         
-        #Check if player is close
+        #Enemy checks if player is close
         #if so, go in that direction
         if self.is_close(player):
             if player.xcor() < self.xcor():
